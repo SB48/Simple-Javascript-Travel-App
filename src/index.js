@@ -36,9 +36,13 @@ function readFile() {
       var countries = JSON.parse(jsonString);
       //loop through each country
       countries.forEach(function (country) {
-        // YOUR CODE HERE
-        // to make your code simpler it may be a good idea to call a function here
-        // that is written below so that the readFile() function does not become too long
+        if (country.name === input) {
+          let newline = "\r\n";
+          let message = "Name: " + JSON.stringify(country.name);
+          message += newline;
+          message += "Price: " + JSON.stringify(country.price);
+          alert(message);
+        }
       });
     } catch (err) {
       console.log("Error parsing JSON string:", err);
