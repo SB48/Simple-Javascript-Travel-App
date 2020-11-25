@@ -221,3 +221,65 @@ function levenshtein(a, b) {
   return matrix[b.length][a.length];
 }
 
+//------------------------------------------------------------------------
+//TASK 5
+//This function is for the final task 5 - bubble sort
+document
+  .getElementById("bubble_sort")
+  .addEventListener("click", function (event) {
+    //when the "view all destinations" button is clicked
+    //the website should show a list of all available destinations ordered by their price
+    bubbleSort();
+
+    //The following two lines prevent the page from reloading when the form is submitted
+    event.preventDefault();
+    return false;
+  });
+
+//------------------------------------------------------------------------
+
+function bubbleSort() {
+  const fs = require("fs");
+  //This will also work on the full sized database
+  fs.readFile("src/smalldatabase.json", "utf8", (err, jsonString) => {
+    //error checking to make sure that the database is read correctly
+    if (err) {
+      //This line will print if an error occurs
+      console.log("Error reading file from disk:", err);
+      return;
+    }
+
+    var countries = JSON.parse(jsonString);
+    var loopLength = countries.length - 1;
+    var swap;
+    do {
+      swap = false;
+      for (var i = 0; i < loopLength; i++) {
+        let firstNum = parseInt(countries[i].price, 10);
+        //this is why the looplength has to be one less than the array size
+        //as we are looking forward to the next item then we dont want to reach
+        //the end of the array and try look at a nonexistent next value
+        let secondNum = parseInt(countries[i + 1].price, 10);
+        //we check if each item is bigger than the next item in the array
+        //if it is then we swap
+        if (firstNum > secondNum) {
+          var temp = countries[i];
+          countries[i] = countries[i + 1];
+          countries[i + 1] = temp;
+          swap = true;
+        }
+      }
+      loopLength--;
+    } while (swap); //stop once we loop through the whole array without
+    //swapping any values
+    let message = "";
+    let newline = "\r\n";
+    countries.forEach(function (country) {
+      message += "Destination: " + JSON.stringify(country.name);
+      message += " Price: £" + JSON.stringify(country.price);
+      message += newline;
+    });
+    message = message.replace(/"/g, "");
+    alert(message);
+  });
+}
